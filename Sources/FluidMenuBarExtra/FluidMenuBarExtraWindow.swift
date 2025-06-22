@@ -14,6 +14,7 @@ import SwiftUI
 /// `FluidMenuBarExtraWindow` listens for changes to the size of its content and
 /// automatically adjusts its frame to match.
 final class FluidMenuBarExtraWindow<Content: View>: NSPanel {
+    weak var statusBarItem: FluidMenuBarExtraStatusItem?
     private let content: () -> Content
 
     private lazy var visualEffectView: NSVisualEffectView = {
@@ -106,6 +107,8 @@ final class FluidMenuBarExtraWindow<Content: View>: NSPanel {
         }
 
         DispatchQueue.main.async { [weak self] in
+            let properOrigin = self?.statusBarItem?.windowTopLeftPoint(for: nextFrame) ?? nextFrame.origin
+            nextFrame.origin = properOrigin
             self?.setFrame(nextFrame, display: true, animate: true)
         }
     }

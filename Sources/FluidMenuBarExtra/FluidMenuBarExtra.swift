@@ -39,6 +39,7 @@ public final class FluidMenuBarExtra {
     init<Content: View>(title: String, image: NSImage?, @ViewBuilder content: @escaping () -> Content) {
         let window = FluidMenuBarExtraWindow(title: title, content: content)
         statusItem = FluidMenuBarExtraStatusItem(title: title, image: image, window: window)
+        window.statusBarItem = statusItem
     }
 
     public convenience init<Content: View>(title: String, @ViewBuilder content: @escaping () -> Content) {

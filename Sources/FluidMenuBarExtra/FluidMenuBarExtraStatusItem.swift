@@ -98,16 +98,24 @@ final class FluidMenuBarExtraStatusItem: NSObject, NSWindowDelegate {
     }
 
     private func setWindowPosition() {
-        guard let statusItemWindow = statusItem.button?.window else {
+        guard let topLeftOrigin = windowTopLeftPoint(for: window.frame) else {
             // If we don't know where the status item is, just place the window in the center.
             window.center()
             return
         }
+        window.setFrameTopLeftPoint(topLeftOrigin)
+    }
+}
 
+extension FluidMenuBarExtraStatusItem {
+    func windowTopLeftPoint(for windowFrame: CGRect) -> CGPoint? {
+        guard let statusItemWindow = statusItem.button?.window else {
+            return nil
+        }
         var targetRect = statusItemWindow.frame
 
         if let screen = statusItemWindow.screen {
-            let windowWidth = window.frame.width
+            let windowWidth = windowFrame.width
 
             if statusItemWindow.frame.origin.x + windowWidth > screen.visibleFrame.width {
                 targetRect.origin.x += statusItemWindow.frame.width
@@ -125,7 +133,7 @@ final class FluidMenuBarExtraStatusItem: NSObject, NSWindowDelegate {
             targetRect.origin.x -= Metrics.windowBorderSize
         }
 
-        window.setFrameTopLeftPoint(targetRect.origin)
+        return targetRect.origin
     }
 }
 
