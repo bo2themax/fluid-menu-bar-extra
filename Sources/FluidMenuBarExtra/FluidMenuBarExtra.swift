@@ -36,18 +36,20 @@ import SwiftUI
 public final class FluidMenuBarExtra {
     private let statusItem: FluidMenuBarExtraStatusItem
 
-    public init(title: String, @ViewBuilder content: @escaping () -> some View) {
-        let window = FluidMenuBarExtraWindow(title: title, content: content)
-        statusItem = FluidMenuBarExtraStatusItem(title: title, window: window)
-    }
-
-    public init(title: String, image: String, @ViewBuilder content: @escaping () -> some View) {
+    init<Content: View>(title: String, image: NSImage?, @ViewBuilder content: @escaping () -> Content) {
         let window = FluidMenuBarExtraWindow(title: title, content: content)
         statusItem = FluidMenuBarExtraStatusItem(title: title, image: image, window: window)
     }
 
-    public init(title: String, systemImage: String, @ViewBuilder content: @escaping () -> some View) {
-        let window = FluidMenuBarExtraWindow(title: title, content: content)
-        statusItem = FluidMenuBarExtraStatusItem(title: title, systemImage: systemImage, window: window)
+    public convenience init<Content: View>(title: String, @ViewBuilder content: @escaping () -> Content) {
+        self.init(title: title, image: nil, content: content)
+    }
+
+    public convenience init<Content: View>(title: String, image: String, @ViewBuilder content: @escaping () -> Content) {
+        self.init(title: title, image: NSImage(named: image), content: content)
+    }
+
+    public convenience init<Content: View>(title: String, systemImage: String, @ViewBuilder content: @escaping () -> Content) {
+        self.init(title: title, image: NSImage(systemSymbolName: systemImage, accessibilityDescription: title), content: content)
     }
 }
